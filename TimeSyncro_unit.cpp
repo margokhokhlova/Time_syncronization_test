@@ -4,6 +4,8 @@
 #include <windows.h>
 #include <chrono>
 #include <thread>         // std::this_thread::sleep_until
+#include <dos.h>
+
 using namespace std;
 
 long timediff(clock_t t1, clock_t t2) {
@@ -28,7 +30,9 @@ int fib(int n) {
 		return fib(n - 1) + fib(n - 2);
 	}
 }
-
+void op(int n) {
+	100000 * 10;
+}
 int
   main (int argc, char** argv)
 {
@@ -76,6 +80,32 @@ int
   std::cout << "fib(100) and 30000 mks of sleep took "  <<
 	  time2 << " to run.\n";
 
+  //test 3 delay
+  cout << "Test one with Sleep_for ms" << endl << "Simple run: " << endl;
+  startTime = GetTickCount();
+  fib(12);
+  std::this_thread::sleep_for(30ms);
+  endTime = GetTickCount();
+  time2 = endTime - startTime;
+  std::cout << "fib(12) and 30000 mks of sleep took " << 	  time2 << " to run.\n";
+
+  // test
+  cout << "Test one with _sleep ms" << endl << "Simple run: " << endl;
+  std::chrono::high_resolution_clock::now();
+  fib(12);
+  _sleep(30); //
+  end_time = std::chrono::high_resolution_clock::now();
+  time = end_time - start_time;
+  std::cout << "fib(100) and 30000 mks of sleep took " <<
+	  std::chrono::duration_cast<std::chrono::microseconds>(time).count() << " to run.\n";
+
+
+
+  //test 4 check this https://www.codemiles.com/c-c/implementing-synchronization-in-c-with-threads-t2753.html
+  typedef void* HANDLE;
+  HANDLE myHandleToSomething = op;
+//https://www.codemiles.com/c-c/implementing-synchronization-in-c-with-threads-t2753.html
+  WaitForSingleObject(myHandleToSomething, 5);
 
   return (0);
 }
